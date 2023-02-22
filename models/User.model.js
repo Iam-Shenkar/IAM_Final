@@ -12,7 +12,6 @@ const userSchema = new Schema({
   status: { type: String, default: 'active' },
   suspensionTime: { type: Number, default: 0 },
   suspensionDate: { type: Date, default: 0 },
-  googleId: { type: String, default: null },
   refreshToken: { type: String, default: null },
   accountId: { type: String },
 }, { collection: 'user' });

@@ -18,8 +18,6 @@ passport.use(new GoogleStrategy(
     const {
       id: googleId,
       displayName: username,
-      given_name: firstName,
-      family_name: lastName,
       picture: photo,
       email,
     } = profile;
@@ -27,7 +25,6 @@ passport.use(new GoogleStrategy(
     if (!findUser) {
       await User.create({
         name: username,
-        googleId,
         email,
         password: 'null',
         loginDate: new Date(),

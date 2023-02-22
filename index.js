@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '.env' });
+require('dotenv')
+  .config({ path: '.env' });
 require('./services/googleStrategy');
 
 const bodyParser = require('body-parser');
@@ -37,7 +38,11 @@ app.use(bodyParser.json());
 
 app.use(express.json());
 
-app.use(session({ secret: process.env.secret, resave: false, saveUninitialized: true }));
+app.use(session({
+  secret: process.env.secret,
+  resave: false,
+  saveUninitialized: true,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -1,5 +1,5 @@
 {
-  "name": "iamassignment3",
+  "name": "IAM_Final",
   "version": "1.0.0",
   "description": "IAM Assignment 3",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Iam-Shenkar/iamAssignment3.git"
+    "url": "git+https://github.com/Iam-Shenkar/IAM_Final.git"
   },
   "keywords": [
     "IAM"
@@ -18,9 +18,9 @@
   "author": "Shahar Ofir Roni Tomer Roey Racheli",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Iam-Shenkar/iamAssignment3/issues"
+    "url": "https://github.com/Iam-Shenkar/IAM_Final/issues"
   },
-  "homepage": "https://github.com/Iam-Shenkar/iamAssignment3#readme",
+  "homepage": "https://github.com/Iam-Shenkar/IAM_Final#readme",
   "dependencies": {
     "amqplib": "^0.10.3",
     "bcrypt": "^5.1.0",

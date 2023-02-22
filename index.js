@@ -1,6 +1,7 @@
 require('dotenv')
   .config({ path: '.env' });
 require('./services/googleStrategy');
+require('./services/linkedinStrategy');
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');

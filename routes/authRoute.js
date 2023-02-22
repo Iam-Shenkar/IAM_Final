@@ -8,6 +8,7 @@ const { generateToken } = require('../middleware/authenticate');
 const registerController = require('../controllers/registerController');
 const logoutController = require('../controllers/logoutController');
 const googleController = require('../controllers/googleController');
+const linkedinController = require('../controllers/linkedinController');
 
 authRouter.post('/logout', logoutController.logout);
 
@@ -20,5 +21,7 @@ authRouter.get('/:accountId/users/:email/confirmation', registerController.confi
 
 authRouter.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
 authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error' }), googleController.handleGoogleCallBack);
+authRouter.get('/linkedin', passport.authenticate('linkedin', { scope: ['r_emailaddress', 'r_liteprofile', 'w_member_social'] }));
+authRouter.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/error' }), linkedinController.handleLinkedinCallBack);
 
 module.exports = { authRouter };

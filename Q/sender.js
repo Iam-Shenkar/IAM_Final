@@ -1,4 +1,3 @@
-
 const amqp = require('amqplib/callback_api');
 
 const { amqpCreateFreePlan } = process.env;
@@ -6,10 +5,10 @@ const { amqpSuspendedAccount } = process.env;
 
 const freePlan2Q = async (accountId) => {
   amqp.connect(amqpCreateFreePlan, (err, conn) => {
-    conn.createChannel(async (err, ch) => {
+    conn.createChannel(async (error, ch) => {
       const q = 'CloudAMQP';
       const freePlan = {
-        accountId: accountId
+        accountId,
       };
       const stringMsg = JSON.stringify(freePlan);
       ch.assertQueue(q, { durable: false });
@@ -20,11 +19,13 @@ const freePlan2Q = async (accountId) => {
 
 const newStatus2Q = async (accountId, status) => {
   amqp.connect(amqpSuspendedAccount, (err, conn) => {
-    conn.createChannel(async (err, ch) => {
+    conn.createChannel(async (error, ch) => {
       const q = 'CloudAMQP';
       const suspendedAccount = {
         accountId,
-        status
+        subscription: {
+          status,
+        },
       };
       const stringMsg = JSON.stringify(suspendedAccount);
       ch.assertQueue(q, { durable: false });
@@ -33,4 +34,7 @@ const newStatus2Q = async (accountId, status) => {
   });
 };
 
-module.exports = { freePlan2Q, newStatus2Q };
+module.exports = {
+  freePlan2Q,
+  newStatus2Q,
+};

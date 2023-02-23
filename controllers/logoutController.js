@@ -1,4 +1,4 @@
-const { Account, User } = require('../repositories/repositories.init');
+const { User } = require('../repositories/repositories.init');
 
 const logout = async (req, res) => {
   await User.update({ email: req.body.email }, { refreshToken: 0 });

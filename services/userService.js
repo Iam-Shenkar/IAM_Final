@@ -13,7 +13,6 @@ const adminUpdateUser = async (data) => {
 
   const updateData = {
     name: data.name,
-    // role: data.role,
     status: data.status,
   };
   if (data.status === 'suspended') {

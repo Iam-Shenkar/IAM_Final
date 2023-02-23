@@ -138,5 +138,5 @@ module.exports = {
   unSuspendAccount,
   QUpdateAccount,
   QSuspendAccount,
-  updateWithFeatures
+  updateWithFeatures,
 };

@@ -12,6 +12,4 @@ assetsRoute.put('/seats/:seat', assetsController.setSeats);
 assetsRoute.put('/credits/:credit', assetsController.setCredit);
 assetsRoute.get('/token', assetsController.verifyToken);
 
-
-
 module.exports = { assetsRoute };

@@ -1,5 +1,6 @@
 const { Account } = require('../repositories/repositories.init');
 const accountService = require('../services/accountService');
+const { httpError } = require('../class/httpError');
 
 describe('isFeatureExists', () => {
   it('returns true if the feature exists in the account features', async () => {
@@ -34,7 +35,7 @@ describe('isFeatureExists', () => {
     expect(result).toBe(false);
   });
 });
-
+//
 // describe('updateWithFeatures', () => {
 //   it('updates the account with the new feature', async () => {
 //     const accountId = 'testAccountId';
@@ -57,3 +58,6 @@ describe('isFeatureExists', () => {
 //     expect(Account.update).toHaveBeenCalledWith(expectedUpdate);
 //   });
 // });
+describe('editAuthorization'), () => {
+
+}

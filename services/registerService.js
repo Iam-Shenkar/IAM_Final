@@ -7,16 +7,23 @@ const { httpError } = require('../class/httpError');
 
 const { User, oneTimePass } = require('../repositories/repositories.init');
 
+
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
     lowerCaseAlphabets: false,
     specialChars: false,
   });
+  if (!sendCode) throw new httpError(400, 'No new OTP created');
   const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
-  if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
   await oneTimePass.create(newOneTimePass);
   return newOneTimePass;
+};
+
+const existCode = async (email) => {
+  const userEmail = email.toLowerCase();
+  const userCode = await oneTimePass.retrieve({ email: userEmail });
+  return userCode;
 };
 
 const deleteFormOTP = async (data) => {
@@ -27,11 +34,6 @@ const deleteFormOTP = async (data) => {
   }
 };
 
-const existCode = async (email) => {
-  const userEmail = email.toLowerCase();
-  const userCode = await oneTimePass.retrieve({ email: userEmail });
-  return userCode;
-};
 
 const otpCompare = async (UserCode, userCode) => {
   if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');
@@ -64,7 +66,7 @@ const createUser = async (user) => {
 
 const codeTime = async (user, timeCode) => {
   const time = Math.abs(new Date().getMinutes() - user.creationDate.getMinutes());
-  if (time < timeCode) return true;
+  return time < timeCode;
 };
 
 module.exports = {

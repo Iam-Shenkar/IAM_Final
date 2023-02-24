@@ -37,12 +37,15 @@ const inviteNewUser = async (name, accountId, mail) => {
   }
 };
 
-const inviteAuthorization = (account, invitedUser) => {
+const inviteAuthorization = async (account, invitedUser) => {
   if (account._id.toString() === invitedUser.accountId) throw new Error('User already in the account');
-  if (account.type === 'admin') throw new httpError(400, 'Cant add Admins to an account');
-  if (account.type === 'user') throw new httpError(400, 'User already in an Account');
+  if (invitedUser.type === 'admin') throw new httpError(400, 'Cant add Admins to an account');
+  if (invitedUser.type === 'user') throw new httpError(400, 'User already in an Account');
   if (invitedUser.status !== 'active') throw new httpError(400, 'User is not active');
-  if (account === null) throw new httpError(404, 'Account not found');
+  // If you have passed all the tests, it means that you are a manager with active status.
+  const belongToAccount = invitedUser.accountId;
+  const invitedAccount = await Account.retrieve({ _id: belongToAccount });
+  if (invitedAccount.plan !== 'free') throw new httpError(400, 'The account of the user is not with plan "free"');
 };
 
 const editAuthorization = async (accountId) => {

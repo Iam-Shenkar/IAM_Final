@@ -1,11 +1,17 @@
 const bcrypt = require('bcrypt');
 const register = require('../services/registerService');
 const { userExist } = require('../services/authService');
-const { existCode, sendEmailOneTimePass } = require('../services/registerService');
+const {
+  existCode,
+  sendEmailOneTimePass,
+} = require('../services/registerService');
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
 const { freePlan2Q } = require('../Q/sender');
-const { Account, User } = require('../repositories/repositories.init');
+const {
+  Account,
+  User,
+} = require('../repositories/repositories.init');
 const { setSeats } = require('../services/assetsService');
 
 const handleRegister = async (req, res, next) => {
@@ -52,7 +58,10 @@ const handleConfirmCode = async (req, res, next) => {
       const account = await Account.retrieve({ name: userEmail });
       await Account.update({ accountId: account._id.toString() }, { status: 'active' });
       await freePlan2Q(account._id.toString());
-      await User.update({ email: userEmail }, { accountId: account._id.toString(), status: 'active' });
+      await User.update({ email: userEmail }, {
+        accountId: account._id.toString(),
+        status: 'active',
+      });
     }
 
     res.status(200)
@@ -64,12 +73,16 @@ const handleConfirmCode = async (req, res, next) => {
 
 const confirmationUser = async (req, res, next) => {
   try {
-    const { email, accountId } = req.params;
+    const {
+      email,
+      accountId,
+    } = req.params;
     const user = await userExist(email);
+    const belongToAccount = user.accountId;
 
     if (user.status === 'active') {
-      await Account.delete({ _id: user.accountId });
-      await User.update({ email }, { accountId });
+      await Account.delete({ _id: belongToAccount });
+      await User.update({ email: user.email }, { accountId });
       await setSeats(accountId, 1);
     } else if (user.status !== 'pending') {
       throw new httpError(401, 'Unable to confirm this user');
@@ -81,4 +94,8 @@ const confirmationUser = async (req, res, next) => {
   }
 };
 
-module.exports = { handleRegister, handleConfirmCode, confirmationUser };
+module.exports = {
+  handleRegister,
+  handleConfirmCode,
+  confirmationUser,
+};

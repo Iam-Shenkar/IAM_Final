@@ -1,11 +1,21 @@
 const passport = require('passport');
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 const jwt = require('jsonwebtoken');
-const { User, Account } = require('../repositories/repositories.init');
+const Logger = require('abtest-logger');
+const {
+  User,
+  Account,
+} = require('../repositories/repositories.init');
 
-const { LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, runningPath } = process.env;
+const logger = new Logger(process.env.CORE_QUEUE);
 
-console.log('LinkedIn authentication flow started...');
+const {
+  LINKEDIN_CLIENT_ID,
+  LINKEDIN_CLIENT_SECRET,
+  runningPath,
+} = process.env;
+
+logger.info('LinkedIn authentication flow started...');
 
 passport.use(new LinkedInStrategy({
   clientID: LINKEDIN_CLIENT_ID,
@@ -14,6 +24,7 @@ passport.use(new LinkedInStrategy({
   scope: ['r_emailaddress', 'r_liteprofile', 'w_member_social'],
   passReqToCallback: true,
 }, async (req, accessToken, refreshToken, profile, done) => {
+  let newFlag = 0;
   // Extract user information from profile
   const _user = {
     linkedinId: profile.id,
@@ -31,6 +42,8 @@ passport.use(new LinkedInStrategy({
       status: 'active',
     });
     await Account.create({ name: _user.email });
+    await Account.retrieve({name: email});
+    newFlag = 1;
   }
 
   const token = jwt.sign({ email: _user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
@@ -41,6 +54,7 @@ passport.use(new LinkedInStrategy({
     token,
     refToken,
     email,
+    newFlag
   };
   return done(null, user, data);
 }));

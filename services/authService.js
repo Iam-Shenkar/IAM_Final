@@ -2,7 +2,10 @@ const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const { httpError } = require('../class/httpError');
 const { sendEmail } = require('../sendEmail/sendEmail');
-const { Account, User } = require('../repositories/repositories.init');
+const {
+  Account,
+  User,
+} = require('../repositories/repositories.init');
 
 const unSuspend = async (object, val) => {
   const model = val === 'user' ? User : Account;
@@ -24,31 +27,38 @@ const userExist = async (email) => {
   return user;
 };
 
-const accountStatusCheck = async (accountId) => {
-  const account = await Account.retrieve({ _id: accountId });
-  await statusCheck(account, 'account');
-};
-
 const statusCheck = async (object, model) => {
-  switch (object.status) {
+  const {
+    status,
+    suspensionDate,
+    suspensionTime,
+    name,
+  } = object;
+
+  switch (status) {
     case 'active':
-      break;
+      return 'Password generated successfully. Please check your email.';
+
     case 'closed':
-      throw new httpError(403, 'User is closed');
+      throw new httpError(403, `User ${name} is closed`);
 
     case 'suspended':
-      const suspendTime = object.suspensionTime;
-      const suspendStartDate = object.suspensionDate;
-      const dateExpired = suspendStartDate;
-      dateExpired.setDate(suspendStartDate.getDate() + suspendTime);
+      const dateExpired = new Date(suspensionDate.getTime() + suspensionTime * 86400000);
       if (dateExpired > new Date()) {
-        throw new httpError(403, `${model} ${object.name} is suspended until ${dateExpired}`);
+        throw new httpError(403, `${model} ${name} is suspended until ${dateExpired}`);
       } else {
         await unSuspend(object, model);
       }
       break;
+
     default:
+      break;
   }
+};
+
+const accountStatusCheck = async (accountId) => {
+  const account = await Account.retrieve({ _id: accountId });
+  await statusCheck(account, 'Account');
 };
 
 const generatePassword = () => {

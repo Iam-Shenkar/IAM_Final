@@ -2,8 +2,6 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const jwt = require('jsonwebtoken');
 const { Account, User } = require('../repositories/repositories.init');
-const {freePlan2Q} = require("../Q/sender");
-
 const GOOGLE_CLIENT_ID = process.env.ClientId;
 const GOOGLE_CLIENT_SECRET = process.env.ClientSecret;
 const { runningPath } = process.env;
@@ -15,10 +13,9 @@ passport.use(new GoogleStrategy(
     callbackURL: `${runningPath}/auth/google/callback`,
   },
   async (request, accessToken, refreshToken, profile, done) => {
+    let newFlag = 0;
     const {
-      id: googleId,
       displayName: username,
-      picture: photo,
       email,
     } = profile;
     const findUser = await User.retrieve({ email });
@@ -31,8 +28,8 @@ passport.use(new GoogleStrategy(
         status: 'active',
       });
       await Account.create({ name: email });
-      const account = await Account.retrieve({name: email});
-      await freePlan2Q(account._id.toString());
+      await Account.retrieve({name: email})
+      newFlag = 1;
     }
     const token = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
     const refToken = jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
@@ -43,6 +40,7 @@ passport.use(new GoogleStrategy(
       token,
       refToken,
       email,
+      newFlag
     };
     return done(null, user, data);
   },

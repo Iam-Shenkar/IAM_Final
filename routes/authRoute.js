@@ -7,8 +7,7 @@ const loginController = require('../controllers/loginController');
 const { generateToken } = require('../middleware/authenticate');
 const registerController = require('../controllers/registerController');
 const logoutController = require('../controllers/logoutController');
-const googleController = require('../controllers/googleController');
-const linkedinController = require('../controllers/linkedinController');
+const ExternalLoginController = require('../controllers/ExternalLoginController');
 
 authRouter.post('/logout', logoutController.logout);
 
@@ -19,9 +18,10 @@ authRouter.post('/register', registerController.handleRegister);
 authRouter.post('/register/code', registerController.handleConfirmCode);
 authRouter.get('/:accountId/users/:email/confirmation', registerController.confirmationUser);
 
+//External Logins
 authRouter.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
-authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error' }), googleController.handleGoogleCallBack);
+authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error' }), ExternalLoginController.handleExternalCallBack);
 authRouter.get('/linkedin', passport.authenticate('linkedin', { scope: ['r_emailaddress', 'r_liteprofile', 'w_member_social'] }));
-authRouter.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/error' }), linkedinController.handleLinkedinCallBack);
+authRouter.get('/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/error' }), ExternalLoginController.handleExternalCallBack);
 
 module.exports = { authRouter };

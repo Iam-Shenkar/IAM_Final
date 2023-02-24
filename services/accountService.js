@@ -1,5 +1,8 @@
 const { sendEmail } = require('../sendEmail/sendEmail');
-const { Account, User } = require('../repositories/repositories.init');
+const {
+  Account,
+  User,
+} = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 const { newStatus2Q } = require('../Q/sender');
 
@@ -50,10 +53,17 @@ const editAuthorization = async (accountId) => {
 };
 
 const isFeatureExists = async (accountId, feature) => {
-  const acc = await Account.retrieve({ _id: accountId });
-  const currentFeatures = acc.assets.features;
-  const isExists = currentFeatures.includes(feature);
-  return isExists;
+  try {
+    const acc = await Account.retrieve({ _id: accountId });
+    const currentFeatures = acc.assets.features;
+    if (!Array.isArray(feature)) {
+      throw new Error('Feature parameter must be an array.');
+    }
+    return feature.some((f) => currentFeatures.includes(f));
+  } catch (error) {
+    console.error(`Error checking for feature: ${error}`);
+    return false;
+  }
 };
 
 const suspendAccount = async (acc, body) => {
@@ -90,11 +100,13 @@ const createUserToAccount = async (email, account) => {
   return newUser;
 };
 
-
 const updateWithFeatures = async (id, data, feature) => {
   await Account.update(
     { _id: id },
-    { ...data, $push: { 'assets.features': feature } },
+    {
+      ...data,
+      $push: { 'assets.features': feature },
+    },
   );
 };
 

@@ -2,12 +2,17 @@ const { EventEmitter } = require('events');
 const mongoose = require('mongoose');
 const Path = require('path');
 
+const Logger = require('abtest-logger');
+
+const logger = new Logger(process.env.CORE_QUEUE);
+
 mongoose.set('strictQuery', true);
 module.exports = class MongoStorage extends EventEmitter {
   constructor(entity) {
     super();
 
-    this.entityName = entity.charAt(0).toUpperCase() + entity.slice(1);
+    this.entityName = entity.charAt(0)
+      .toUpperCase() + entity.slice(1);
     this.Model = require(Path.join(__dirname, `../models/${this.entityName}.model.js`));
     this.connect();
   }
@@ -16,8 +21,8 @@ module.exports = class MongoStorage extends EventEmitter {
     const connectionUrl = process.env.DB_HOST;
     mongoose
       .connect(connectionUrl)
-      .then(() => console.log(`connected to ${this.entityName} collection`))
-      .catch((err) => console.log(`connection error: ${err}`));
+      .then(() => logger.info(`connected to ${this.entityName} collection`))
+      .catch((err) => logger.info(`connection error: ${err}`));
   }
 
   find(param) {

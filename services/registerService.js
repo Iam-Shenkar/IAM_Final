@@ -5,7 +5,10 @@ const { userRole } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { httpError } = require('../class/httpError');
 
-const { User, oneTimePass } = require('../repositories/repositories.init');
+const {
+  User,
+  oneTimePass,
+} = require('../repositories/repositories.init');
 
 
 const createOneTimePass = async (email) => {
@@ -14,8 +17,11 @@ const createOneTimePass = async (email) => {
     lowerCaseAlphabets: false,
     specialChars: false,
   });
+
   if (!sendCode) throw new httpError(400, 'No new OTP created');
   const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
+  if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
+
   await oneTimePass.create(newOneTimePass);
   return newOneTimePass;
 };
@@ -33,7 +39,6 @@ const deleteFormOTP = async (data) => {
     if (!deletedOTP) throw new httpError(400, 'Failed to delete OTP');
   }
 };
-
 
 const otpCompare = async (UserCode, userCode) => {
   if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');

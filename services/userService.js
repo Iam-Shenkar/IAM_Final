@@ -13,7 +13,6 @@ const adminUpdateUser = async (data) => {
 
   const updateData = {
     name: data.name,
-    // role: data.role,
     status: data.status,
   };
   if (data.status === 'suspended') {
@@ -33,4 +32,8 @@ const deleteAuthorization = (user, account, data) => {
   if (user.type !== 'user') throw new httpError(400, 'Unable to delete this user');
 };
 
-module.exports = { updateName, adminUpdateUser, deleteAuthorization };
+module.exports = {
+  updateName,
+  adminUpdateUser,
+  deleteAuthorization,
+};

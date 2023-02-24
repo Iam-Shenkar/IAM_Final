@@ -27,12 +27,6 @@ const loginControl = async (req, res, next) => {
         refreshToken: req.token.refreshToken,
       },
     );
-
-    res.cookie('email', user.email);
-    res.cookie('name', user.name);
-    res.cookie('role', user.type);
-    res.cookie('account', user.accountId);
-    // res.redirect('/');
     res.sendStatus(200);
   } catch (err) {
     next(err);

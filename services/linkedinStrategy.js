@@ -24,6 +24,7 @@ passport.use(new LinkedInStrategy({
   scope: ['r_emailaddress', 'r_liteprofile', 'w_member_social'],
   passReqToCallback: true,
 }, async (req, accessToken, refreshToken, profile, done) => {
+  let newFlag = 0;
   // Extract user information from profile
   const _user = {
     linkedinId: profile.id,
@@ -41,6 +42,8 @@ passport.use(new LinkedInStrategy({
       status: 'active',
     });
     await Account.create({ name: _user.email });
+    await Account.retrieve({name: email});
+    newFlag = 1;
   }
 
   const token = jwt.sign({ email: _user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
@@ -51,6 +54,7 @@ passport.use(new LinkedInStrategy({
     token,
     refToken,
     email,
+    newFlag
   };
   return done(null, user, data);
 }));

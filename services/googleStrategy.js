@@ -2,7 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const jwt = require('jsonwebtoken');
 const { Account, User } = require('../repositories/repositories.init');
-const { freePlan2Q } = require('../Q/sender');
+const {freePlan2Q} = require("../Q/sender");
 
 const GOOGLE_CLIENT_ID = process.env.ClientId;
 const GOOGLE_CLIENT_SECRET = process.env.ClientSecret;
@@ -31,11 +31,14 @@ passport.use(new GoogleStrategy(
         status: 'active',
       });
       await Account.create({ name: email });
+      const account = await Account.retrieve({name: email});
+      await freePlan2Q(account._id.toString());
     }
     const token = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
     const refToken = jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
     await User.update({ email }, { refreshToken: refToken });
     const user = await User.retrieve({ email });
+
     const data = {
       token,
       refToken,

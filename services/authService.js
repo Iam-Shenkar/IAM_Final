@@ -37,7 +37,7 @@ const statusCheck = async (object, model) => {
 
   switch (status) {
     case 'active':
-      return 'Password generated successfully. Please check your email.';
+      return;
 
     case 'closed':
       throw new httpError(403, `User ${name} is closed`);

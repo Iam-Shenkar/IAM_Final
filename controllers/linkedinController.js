@@ -2,13 +2,13 @@ const {
   User,
   Account,
 } = require('../repositories/repositories.init');
-const { freePlan2Q } = require('../Q/sender');
+const {statusCheck} = require("../services/authService");
 
 const handleLinkedinCallBack = async (req, res) => {
   const findUser = await User.retrieve({ email: req.authInfo.email });
   const account = await Account.retrieve({ name: findUser.email });
-  await Account.update({ accountId: account._id.toString() }, { status: 'active' });
-  await freePlan2Q(account._id.toString());
+  await statusCheck(findUser, User)
+  await Account.update({ _id: account._id.toString() }, { status: 'active' });
   await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });
   // cookies
   res.cookie('jwt', req.authInfo.refToken, {

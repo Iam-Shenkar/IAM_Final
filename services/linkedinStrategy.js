@@ -6,6 +6,7 @@ const {
   User,
   Account,
 } = require('../repositories/repositories.init');
+const {freePlan2Q} = require("../Q/sender");
 
 const logger = new Logger(process.env.CORE_QUEUE);
 
@@ -41,6 +42,8 @@ passport.use(new LinkedInStrategy({
       status: 'active',
     });
     await Account.create({ name: _user.email });
+    const account = await Account.retrieve({name: email});
+    await freePlan2Q(account._id.toString());
   }
 
   const token = jwt.sign({ email: _user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });

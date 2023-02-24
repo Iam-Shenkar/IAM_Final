@@ -18,10 +18,11 @@ const sendEmail = async (dataMail, details) => {
     subject: 'Please Verify you Account',
     html: data,
   };
-    // send the mail with the OTP to the client email
+  // send the mail with the OTP to the client email
   await transporter.sendMail(mainOptions, (err) => {
     if (err) {
       throw new Error('transporter error: mail was not sent');
+      // eslint-disable-next-line no-empty
     } else {
     }
   });

@@ -205,7 +205,7 @@ describe('sendEmailOneTimePass', () => {
         {
           name: user.name,
           code: newCode.code,
-        }
+        },
       );
   });
 });
@@ -215,7 +215,6 @@ describe('createUser', () => {
     const user = {
       name: 'John Doe',
       email: 'john@example.com',
-      gender: 'male',
       password: 'password',
     };
 
@@ -231,7 +230,6 @@ describe('createUser', () => {
       .toHaveBeenCalledWith({
         name: user.name,
         email: user.email,
-        gender: user.gender,
         accountId: 'none',
         password: 'hashedPassword', // assert the hashed password is used
       });

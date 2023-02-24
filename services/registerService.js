@@ -10,7 +10,6 @@ const {
   oneTimePass,
 } = require('../repositories/repositories.init');
 
-
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
@@ -62,7 +61,6 @@ const createUser = async (user) => {
   const newUser = {
     name: user.name,
     email: user.email,
-    gender: user.gender,
     accountId: 'none',
     password: hashPassword,
   };

@@ -3,6 +3,10 @@ require('dotenv')
 require('./services/googleStrategy');
 require('./services/linkedinStrategy');
 
+const Logger = require('abtest-logger');
+
+const logger = new Logger(process.env.CORE_QUEUE);
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -25,6 +29,11 @@ const { authenticateToken } = require('./middleware/authenticate');
 
 const { morgan } = require('./middleware/logger');
 const { listenToQ } = require('./Q/reciever');
+
+const {
+  freePlan2Q,
+  newStatus2Q,
+} = require('./Q/sender');
 
 const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
@@ -63,4 +72,4 @@ app.use(errorHandler);
 
 listenToQ();
 
-app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));
+app.listen(port, () => logger.info(`Express server is running on port ${process.env.runningPath}`));

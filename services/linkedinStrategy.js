@@ -1,11 +1,21 @@
 const passport = require('passport');
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 const jwt = require('jsonwebtoken');
-const { User, Account } = require('../repositories/repositories.init');
+const Logger = require('abtest-logger');
+const {
+  User,
+  Account,
+} = require('../repositories/repositories.init');
 
-const { LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, runningPath } = process.env;
+const logger = new Logger(process.env.CORE_QUEUE);
 
-console.log('LinkedIn authentication flow started...');
+const {
+  LINKEDIN_CLIENT_ID,
+  LINKEDIN_CLIENT_SECRET,
+  runningPath,
+} = process.env;
+
+logger.info('LinkedIn authentication flow started...');
 
 passport.use(new LinkedInStrategy({
   clientID: LINKEDIN_CLIENT_ID,

@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Iam-Shenkar/IAM_Final#readme",
   "dependencies": {
+    "abtest-logger": "^1.0.15",
     "amqplib": "^0.10.3",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",

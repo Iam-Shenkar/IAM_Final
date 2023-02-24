@@ -1,6 +1,9 @@
 const amqp = require('amqplib/callback_api');
+const Logger = require('abtest-logger');
 const { QUpdateAccount } = require('../services/accountService');
 const { QSuspendAccount } = require('../services/accountService');
+
+const logger = new Logger(process.env.CORE_QUEUE);
 
 const {
   listenSubscription,
@@ -9,17 +12,17 @@ const {
 
 const listenToQ = () => {
   const q = 'CloudAMQP';
-  console.log('Waiting for a message from Billing in %s', q);
+  logger.info(`Waiting for a message from Billing in ${q}`);
 
   amqp.connect(listenSubscription, (err, conn) => {
     if (err) {
-      console.error('Error connecting to RabbitMQ:', err);
+      logger.error('Error connecting to RabbitMQ:', err);
       return;
     }
 
     conn.createChannel((error, ch) => {
       if (error) {
-        console.error('Error creating channel:', error);
+        logger.error('Error creating channel:', error);
         return;
       }
 
@@ -27,9 +30,9 @@ const listenToQ = () => {
         try {
           const qm = JSON.parse(msg.content.toString());
           QUpdateAccount(qm);
-          console.log(`New assets came from billing to account: ${qm.accountId}`);
+          logger.info(`New assets came from billing to account: ${qm.accountId}`);
         } catch (e) {
-          console.error('Error handling message:', e);
+          logger.error('Error handling message:', e);
         }
       }, { noAck: true });
     });
@@ -37,7 +40,7 @@ const listenToQ = () => {
 
   amqp.connect(listenSuspendedAccount, (err, conn) => {
     if (err) {
-      console.error('Error connecting to RabbitMQ:', err);
+      logger.error('Error connecting to RabbitMQ:', err);
       return;
     }
 
@@ -45,7 +48,7 @@ const listenToQ = () => {
     const q = 'CloudAMQP';
     conn.createChannel((error, ch) => {
       if (error) {
-        console.error('Error creating channel:', error);
+        logger.error('Error creating channel:', error);
         return;
       }
 
@@ -53,9 +56,9 @@ const listenToQ = () => {
         try {
           const qm = JSON.parse(msg.content.toString());
           QSuspendAccount(qm);
-          console.log(`Status suspended came from billing to account: ${qm.accountId}`);
+          logger.info(`Status suspended came from billing to account: ${qm.accountId}`);
         } catch (e) {
-          console.error('Error handling message:', e);
+          logger.error('Error handling message:', e);
         }
       }, { noAck: true });
     });

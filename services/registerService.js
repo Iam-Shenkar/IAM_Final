@@ -5,7 +5,10 @@ const { userRole } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { httpError } = require('../class/httpError');
 
-const { User, oneTimePass } = require('../repositories/repositories.init');
+const {
+  User,
+  oneTimePass,
+} = require('../repositories/repositories.init');
 
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
@@ -13,10 +16,20 @@ const createOneTimePass = async (email) => {
     lowerCaseAlphabets: false,
     specialChars: false,
   });
-  const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
+  const newOneTimePass = {
+    email,
+    code: sendCode,
+    creationDate: new Date(),
+  };
   if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
   await oneTimePass.create(newOneTimePass);
   return newOneTimePass;
+};
+
+const existCode = async (email) => {
+  const userEmail = email.toLowerCase();
+  const userCode = await oneTimePass.retrieve({ email: userEmail });
+  return userCode;
 };
 
 const deleteFormOTP = async (data) => {
@@ -25,12 +38,6 @@ const deleteFormOTP = async (data) => {
     const deletedOTP = await oneTimePass.delete({ email });
     if (!deletedOTP) throw new httpError(400, 'Failed to delete OTP');
   }
-};
-
-const existCode = async (email) => {
-  const userEmail = email.toLowerCase();
-  const userCode = await oneTimePass.retrieve({ email: userEmail });
-  return userCode;
 };
 
 const otpCompare = async (UserCode, userCode) => {

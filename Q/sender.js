@@ -1,5 +1,9 @@
 const amqp = require('amqplib/callback_api');
 
+const Logger = require('abtest-logger');
+
+const logger = new Logger(process.env.CORE_QUEUE);
+
 const { amqpCreateFreePlan } = process.env;
 const { amqpSuspendedAccount } = process.env;
 
@@ -17,7 +21,7 @@ const freePlan2Q = async (accountId) => {
       });
     });
   } catch (error) {
-    console.error(`Error while sending message to amqpCreateFreePlan: ${error}`);
+    logger.error(`Error while sending message to amqpCreateFreePlan: ${error}`);
   }
 };
 
@@ -38,7 +42,7 @@ const newStatus2Q = async (accountId, status) => {
       });
     });
   } catch (error) {
-    console.error(`Error while sending message to amqpSuspendedAccount: ${error}`);
+    logger.error(`Error while sending message to amqpSuspendedAccount: ${error}`);
   }
 };
 

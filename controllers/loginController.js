@@ -19,7 +19,7 @@ const loginControl = async (req, res, next) => {
     if (user.accountId !== 'none') await accountStatusCheck(user.accountId);
 
     await validPassword(req.body.password, user.password);
-    const statusCheckResult = await statusCheck(user, 'user');
+    await statusCheck(user, 'user');
     await User.update(
       { email: user.email },
       {
@@ -33,10 +33,9 @@ const loginControl = async (req, res, next) => {
     res.cookie('role', user.type);
     res.cookie('account', user.accountId);
     // res.redirect('/');
-    res.status(200)
-      .json({ message: statusCheckResult });
-  } catch (error) {
-    next(error);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
   }
 };
 

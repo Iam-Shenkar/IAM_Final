@@ -32,4 +32,8 @@ const deleteAuthorization = (user, account, data) => {
   if (user.type !== 'user') throw new httpError(400, 'Unable to delete this user');
 };
 
-module.exports = { updateName, adminUpdateUser, deleteAuthorization };
+module.exports = {
+  updateName,
+  adminUpdateUser,
+  deleteAuthorization,
+};

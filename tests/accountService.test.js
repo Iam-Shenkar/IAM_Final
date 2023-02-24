@@ -58,6 +58,6 @@ describe('isFeatureExists', () => {
 //     expect(Account.update).toHaveBeenCalledWith(expectedUpdate);
 //   });
 // });
-describe('editAuthorization'), () => {
-
-}
+// describe('editAuthorization'), () => {
+//
+// }

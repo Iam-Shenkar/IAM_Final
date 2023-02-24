@@ -1,16 +1,30 @@
 const {
-  sendInvitation, inviteAuthorization,
-  inviteNewUser, editAuthorization, isFeatureExists, suspendAccount, unSuspendAccount,
+  sendInvitation,
+  inviteAuthorization,
+  inviteNewUser,
+  editAuthorization,
+  isFeatureExists,
+  suspendAccount,
+  unSuspendAccount,
   updateWithFeatures,
 } = require('../services/accountService');
-const { Account, User } = require('../repositories/repositories.init');
-const { getSeats, setSeats } = require('../services/assetsService');
+const {
+  Account,
+  User,
+} = require('../repositories/repositories.init');
+const {
+  getSeats,
+  setSeats,
+} = require('../services/assetsService');
 const { httpError } = require('../class/httpError');
 
 const inviteUser = async (req, res, next) => {
   try {
     const manager = req.user;
-    const { accountId, email } = req.params;
+    const {
+      accountId,
+      email,
+    } = req.params;
     const account = await Account.retrieve({ _id: accountId });
     const invitedUser = await User.retrieve({ email });
     const seats = await getSeats(account._id);
@@ -22,7 +36,8 @@ const inviteUser = async (req, res, next) => {
       await inviteNewUser(req.user.name, accountId, email);
     }
     await setSeats(account._id, 1);
-    res.status(200).json({ message: 'user invited' });
+    res.status(200)
+      .json({ message: 'user invited' });
   } catch (err) {
     next(err);
   }
@@ -47,9 +62,17 @@ const getAccount = async (req, res, next) => {
       }], []);
     const { features } = acc.assets;
     outputArray.unshift({
-      Plan: acc.plan, Seats: acc.assets.seats - acc.assets.usedSeats, Credits: acc.assets.credits, Features: features, accountId: req.params.id, name: acc.name, status: acc.status,
+      // eslint-disable-next-line max-len
+      Plan: acc.plan,
+      Seats: acc.assets.seats - acc.assets.usedSeats,
+      Credits: acc.assets.credits,
+      Features: features,
+      accountId: req.params.id,
+      name: acc.name,
+      status: acc.status,
     });
-    res.status(200).json(outputArray);
+    res.status(200)
+      .json(outputArray);
   } catch (err) {
     next(err);
   }
@@ -82,7 +105,10 @@ const editAccount = async (req, res, next) => {
   try {
     if (!req.body || !req.params.id) throw new httpError(400, 'bad Request');
     const acc = await editAuthorization(req.params.id); // check account's status
-    const { params: { id }, body } = req;
+    const {
+      params: { id },
+      body,
+    } = req;
     if (body.status === 'suspended' && acc.status !== 'suspended') {
       await suspendAccount(acc, body);
       return res.status(200)
@@ -103,7 +129,9 @@ const editAccount = async (req, res, next) => {
     let updatedAccount;
     if (!isExist) {
       updatedAccount = await updateWithFeatures(id, data, body.features);
-    } else { updatedAccount = await Account.update({ _id: id }, { ...data }); }
+    } else {
+      updatedAccount = await Account.update({ _id: id }, { ...data });
+    }
     if (!updatedAccount) throw new httpError(400, 'Not updated');
     return res.status(200)
       .json({ message: 'account updated!' });
@@ -112,13 +140,15 @@ const editAccount = async (req, res, next) => {
   }
 };
 
-
 // change account status to closed
 const disableAccount = async (req, res, next) => {
   try {
     if (!req.params) throw new httpError(400, 'Bad request');
     const acc = await editAuthorization(req.params.id);
-    await User.deleteMany({ accountId: req.params.id, type: { $ne: 'manager' } });
+    await User.deleteMany({
+      accountId: req.params.id,
+      type: { $ne: 'manager' },
+    });
     await Account.update({ _id: acc._id }, { status: 'closed' });
     await User.update({ accountId: req.params.id }, { status: 'closed' });
 
@@ -130,5 +160,11 @@ const disableAccount = async (req, res, next) => {
 };
 
 module.exports = {
-  inviteUser, Account, getAccount, getAccounts, editAccount, disableAccount, isFeatureExists,
+  inviteUser,
+  Account,
+  getAccount,
+  getAccounts,
+  editAccount,
+  disableAccount,
+  isFeatureExists,
 };

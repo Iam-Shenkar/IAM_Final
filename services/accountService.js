@@ -7,7 +7,7 @@ const { httpError } = require('../class/httpError');
 const { newStatus2Q } = require('../Q/sender');
 
 const sendInvitation = async (manager, user) => {
-  const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
+  const path = `${process.env.runningPath}/auth/${manager.accountId}/users/${user.email}/confirmation`;
   const mailData = {
     path: '/sendEmail/invitationUser.ejs',
     subject: 'Please Verify you Account',

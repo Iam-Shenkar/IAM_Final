@@ -28,7 +28,10 @@ const loginControl = async (req, res, next) => {
       },
     );
     res.status(200)
-      .json({ jwt: req.token.refreshToken, role: user.type, email: user.email });
+      .json({
+        refreshToken: req.token.refreshToken,
+        accessToken: req.token.accessToken,
+      });
   } catch (err) {
     next(err);
   }

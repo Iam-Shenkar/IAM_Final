@@ -7,6 +7,7 @@ const { checkPermissionAdmin } = require('../middleware/validatorService');
 accountsRouter.get('/list', checkPermissionAdmin, accountController.getAccounts);
 accountsRouter.post('/:accountId/link/:email', accountController.inviteUser);
 accountsRouter.get('/:id/', accountController.getAccount);
+accountsRouter.get('/toggle/:accountId', accountController.exlusiveORinclusive);
 accountsRouter.put('/:id', checkPermissionAdmin, accountController.editAccount);
 accountsRouter.put('/status/:id', checkPermissionAdmin, accountController.disableAccount);
 

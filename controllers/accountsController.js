@@ -1,3 +1,4 @@
+const axios = require('axios');
 const {
   sendInvitation,
   inviteAuthorization,
@@ -77,6 +78,32 @@ const getAccount = async (req, res, next) => {
       .json(merged);
   } catch (err) {
     next(err);
+  }
+};
+
+const exlusiveORinclusive = async (req, res, next) => {
+  try {
+    const {
+      accountId,
+    } = req.params;
+    const response = await axios.get(`http://localhost:8081/experiments/allowChangeAttribute/${accountId}`);
+    const { data } = response;
+    if (data === true) {
+      const account = await Account.retrieve({ _id: accountId });
+      const { toggle } = account;
+      if (toggle === 'inclusive') {
+        await Account.update({ _id: account._id.toString() }, { toggle: 'exclusive' });
+      } else {
+        await Account.update({ _id: account._id.toString() }, { toggle: 'inclusive' });
+      }
+    } else {
+      console.log('returned false'); // ?
+    }
+    res.status(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500)
+      .send('Server Error');
   }
 };
 
@@ -166,6 +193,7 @@ module.exports = {
   Account,
   getAccount,
   getAccounts,
+  exlusiveORinclusive,
   editAccount,
   disableAccount,
   isFeatureExists,

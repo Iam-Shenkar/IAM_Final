@@ -18,6 +18,7 @@ authRouter.post('/register', registerController.handleRegister);
 authRouter.post('/register/code', registerController.handleConfirmCode);
 authRouter.get('/:accountId/users/:email/confirmation', registerController.confirmationUser);
 
+
 // External Logins
 authRouter.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
 authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error' }), ExternalLoginController.handleExternalCallBack);

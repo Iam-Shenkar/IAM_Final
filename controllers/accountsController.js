@@ -58,12 +58,11 @@ const getAccount = async (req, res, next) => {
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,
-        Gender: currentValue.gender,
         Status: currentValue.status,
         Edit: '',
       }], []);
     const { features } = acc.assets;
-    outputArray.unshift({
+    const asset = {
       // eslint-disable-next-line max-len
       Plan: acc.plan,
       Seats: acc.assets.seats - acc.assets.usedSeats,
@@ -72,9 +71,11 @@ const getAccount = async (req, res, next) => {
       accountId: req.params.id,
       name: acc.name,
       status: acc.status,
-    });
+    };
+    const merged = { ...outputArray, ...asset };
+
     res.status(200)
-      .json(outputArray);
+      .json(merged);
   } catch (err) {
     next(err);
   }

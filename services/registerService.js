@@ -65,7 +65,6 @@ const createUser = async (user) => {
   const newUser = {
     name: user.name,
     email: user.email,
-    gender: user.gender,
     accountId: 'none',
     password: hashPassword,
   };

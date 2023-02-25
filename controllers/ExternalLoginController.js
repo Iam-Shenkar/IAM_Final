@@ -27,9 +27,13 @@ const handleExternalCallBack = async (req, res) => {
       refreshToken: req.authInfo.refToken,
     },
   );
-  res.status(200)
-    .json({ jwt: req.authInfo.refToken, role: findUser.type, email: findUser.email });
+  res.cookie('email', findUser.email);
+  res.cookie('name', findUser.name);
+  res.cookie('role', findUser.type);
+  res.cookie('account', findUser.accountId);
   res.redirect('back');
+  // res.status(200)
+  //   .json({ jwt: req.authInfo.refToken, role: findUser.type, email: findUser.email });
 };
 
 module.exports = { handleExternalCallBack };

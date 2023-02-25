@@ -19,7 +19,7 @@ const loginControl = async (req, res, next) => {
     if (user.accountId !== 'none') await accountStatusCheck(user.accountId);
 
     await validPassword(req.body.password, user.password);
-    await statusCheck(user, 'user');
+    await statusCheck(user, 'User');
     await User.update(
       { email: user.email },
       {
@@ -27,7 +27,8 @@ const loginControl = async (req, res, next) => {
         refreshToken: req.token.refreshToken,
       },
     );
-    res.sendStatus(200);
+    res.status(200)
+      .json(req.token.refreshToken);
   } catch (err) {
     next(err);
   }
@@ -37,7 +38,7 @@ const forgotPassControl = async (req, res, next) => {
   try {
     const user = await userExist(req.body.email);
     if (!user) throw new httpError(401, 'user does not exist');
-    await statusCheck(user, 'Account');
+    await statusCheck(user, 'User');
     const newPass = generatePassword();
     const hashedPassword = await bcrypt.hash(newPass, 12);
     await sendEmailPassword(newPass, user);

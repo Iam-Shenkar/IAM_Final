@@ -31,7 +31,7 @@ function generateAccessToken(user) {
 }
 
 const refreshTokenVerify = async (req, res) => {
-  const refreshToken = req.cookies.jwt;
+  const refreshToken = req.headers.authorization;
   if (refreshToken === undefined) { return res.redirect('/login'); }
 
   const user = await User.retrieve({ refreshToken });

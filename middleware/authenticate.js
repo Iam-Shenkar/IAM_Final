@@ -15,7 +15,6 @@ const generateToken = (req, res, next) => {
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
       sameSite: 'None',
-      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.set({ authorization: `Bearer ${accessToken}` });
@@ -31,8 +30,10 @@ function generateAccessToken(user) {
 }
 
 const refreshTokenVerify = async (req, res) => {
-  const refreshToken = req.headers.authorization;
-  if (refreshToken === undefined) { return res.redirect('/login'); }
+  const refreshToken = req.cookies.jwt ? req.cookies.jwt : req.headers.authorization;
+  if (refreshToken === undefined) {
+    return res.redirect('/login');
+  }
 
   const user = await User.retrieve({ refreshToken });
   if (!user) return res.redirect('/login');
@@ -54,7 +55,9 @@ const authenticateToken = async (req, res, next) => {
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
       await refreshTokenVerify(req, res);
-      if (res.statusCode === 302) { return res.end(); }
+      if (res.statusCode === 302) {
+        return res.end();
+      }
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });

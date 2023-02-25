@@ -28,10 +28,7 @@ const loginControl = async (req, res, next) => {
       },
     );
     res.status(200)
-      .json({
-        refreshToken: req.token.refreshToken,
-        accessToken: req.token.accessToken,
-      });
+      .json({ jwt: req.token.refreshToken, role: user.type, email: user.email });
   } catch (err) {
     next(err);
   }

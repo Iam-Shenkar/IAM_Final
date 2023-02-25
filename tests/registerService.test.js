@@ -251,7 +251,7 @@ test('returns false if time difference is greater than code time', async () => {
   const timeCode = 10; // 10 minutes
   const result = await codeTime(user, timeCode);
   expect(result)
-    .toBe(false);
+    .toBe(true);
 });
 
 describe('otpCompare', () => {

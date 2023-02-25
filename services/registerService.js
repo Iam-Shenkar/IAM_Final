@@ -10,18 +10,18 @@ const {
   oneTimePass,
 } = require('../repositories/repositories.init');
 
+
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
     lowerCaseAlphabets: false,
     specialChars: false,
   });
-  const newOneTimePass = {
-    email,
-    code: sendCode,
-    creationDate: new Date(),
-  };
+
+  if (!sendCode) throw new httpError(400, 'No new OTP created');
+  const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
   if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
+
   await oneTimePass.create(newOneTimePass);
   return newOneTimePass;
 };
@@ -71,7 +71,7 @@ const createUser = async (user) => {
 
 const codeTime = async (user, timeCode) => {
   const time = Math.abs(new Date().getMinutes() - user.creationDate.getMinutes());
-  if (time < timeCode) return true;
+  return time < timeCode;
 };
 
 module.exports = {

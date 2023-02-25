@@ -28,7 +28,7 @@ const loginControl = async (req, res, next) => {
       },
     );
     res.status(200)
-      .json(req.token.refreshToken);
+      .json(req.token.refreshToken, req.token.accessToken);
   } catch (err) {
     next(err);
   }

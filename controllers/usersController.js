@@ -36,7 +36,6 @@ const getUser = async (req, res, next) => {
       name: user.name,
       email: user.email,
       role: user.type,
-      gender: user.gender,
       status: user.status,
       account: accountName,
     };

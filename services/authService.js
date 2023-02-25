@@ -37,10 +37,10 @@ const statusCheck = async (object, model) => {
 
   switch (status) {
     case 'active':
-      return;
+      return `${model} ${name} is active`;
 
     case 'closed':
-      throw new httpError(403, `User ${name} is closed`);
+      throw new httpError(403, `${model} ${name} is closed`);
 
     case 'suspended':
       const dateExpired = new Date(suspensionDate.getTime() + suspensionTime * 86400000);
@@ -65,7 +65,19 @@ const generatePassword = () => {
   const password = generator.generate({
     length: 10,
     numbers: true,
+    strict: true,
+    excludeSimilarCharacters: true,
+    exclude: '!@#$%^&*()',
   });
+
+  // Ensure that the password contains at least 2 digits
+  const digitRegex = /\d/g;
+  const digits = password.match(digitRegex);
+  if (!digits || digits.length < 2) {
+    // If the password doesn't contain at least 2 digits, generate a new one recursively
+    return generatePassword();
+  }
+
   return password;
 };
 

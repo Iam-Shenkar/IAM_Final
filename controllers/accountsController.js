@@ -57,7 +57,6 @@ const getAccount = async (req, res, next) => {
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,
-        Gender: currentValue.gender,
         Status: currentValue.status,
         Edit: '',
       }], []);

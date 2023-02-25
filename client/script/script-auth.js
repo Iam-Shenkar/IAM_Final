@@ -55,9 +55,7 @@ const login = async () => {
     },
     body: JSON.stringify(data),
   });
-    // const body = await response.json();
   if (response.status === 200) {
-    // alert((body.message));
     window.location.href = '/';
   }
 };
@@ -67,6 +65,7 @@ const register = async () => {
     name: document.getElementById('newUsername').value,
     email: document.getElementById('newUserEmail').value,
     password: document.getElementById('pass').value,
+    gender: document.getElementById('pass').value,
   };
   const response = await fetch(`${runningPath}/auth/register`, {
     method: 'POST',
@@ -90,6 +89,7 @@ const confirmationCode = async () => {
     email: document.getElementById('newUserEmail').value,
     password: document.getElementById('pass').value,
     code: document.getElementById('oneTimePassword').value,
+    gender: document.getElementById('gender').value,
   };
   const response = await fetch(`${runningPath}/auth/register/code`, {
     method: 'POST',
@@ -105,14 +105,16 @@ const confirmationCode = async () => {
   if (response.status === 200) {
     const res = document.createElement('h3');
     res.innerHTML = body.message;
-    document.getElementById('emailConfirmation-div').append(res);
+    document.getElementById('emailConfirmation-div')
+      .append(res);
     const backButton = document.createElement('a');
     backButton.innerHTML = 'back to log in';
     backButton.setAttribute('href', '/login');
     const button = document.createElement('button');
     button.setAttribute('type', 'button');
     button.append(backButton);
-    document.getElementById('emailConfirmation-div').append(button);
+    document.getElementById('emailConfirmation-div')
+      .append(button);
   }
 };
 

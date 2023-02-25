@@ -21,6 +21,7 @@ const { httpError } = require('../class/httpError');
 const inviteUser = async (req, res, next) => {
   try {
     const manager = req.user;
+    console.log(manager);
     const {
       accountId,
       email,

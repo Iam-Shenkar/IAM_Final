@@ -1,9 +1,8 @@
-const authService = require('./authService');
 const accountService = require('./accountService');
-const { Account, User } = require('../repositories/repositories.init');
+const { Account } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 
-const getAccountByaccountId = async (accountId) => {
+const getAccountByAccountId = async (accountId) => {
   if (!accountId) {
     throw new httpError(400, "accountId doesn't exist");
   }
@@ -13,7 +12,7 @@ const getAccountByaccountId = async (accountId) => {
 };
 
 const getAssetsByAccountId = async (accountId) => {
-  const account = await getAccountByaccountId(accountId);
+  const account = await getAccountByAccountId(accountId);
   return account.assets;
 };
 
@@ -132,5 +131,14 @@ const setSeatsAdmin = async (accountId, count) => {
 };
 
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails, setSeatsAdmin,
+  getFeatures,
+  getSeats,
+  getCredit,
+  setCredit,
+  setSeats,
+  setFeature,
+  coreDetails,
+  setSeatsAdmin,
+  getAccountByAccountId,
+  getAssetsByAccountId,
 };

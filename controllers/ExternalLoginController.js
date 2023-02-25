@@ -2,13 +2,17 @@ const {
   User,
   Account,
 } = require('../repositories/repositories.init');
-const { freePlan2Q } = require('../Q/sender');
+const {statusCheck} = require("../services/authService");
+const {freePlan2Q} = require("../Q/sender");
 
-const handleLinkedinCallBack = async (req, res) => {
+const handleExternalCallBack = async (req, res) => {
   const findUser = await User.retrieve({ email: req.authInfo.email });
   const account = await Account.retrieve({ name: findUser.email });
-  await Account.update({ accountId: account._id.toString() }, { status: 'active' });
-  await freePlan2Q(account._id.toString());
+  if(req.authInfo.newFlag === 1){
+    await freePlan2Q(account._id.toString());
+  }
+  await statusCheck(findUser, User)
+  await Account.update({ _id: account._id.toString() }, { status: 'active' });
   await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });
   // cookies
   res.cookie('jwt', req.authInfo.refToken, {
@@ -31,4 +35,4 @@ const handleLinkedinCallBack = async (req, res) => {
   res.redirect('/');
 };
 
-module.exports = { handleLinkedinCallBack };
+module.exports = { handleExternalCallBack };

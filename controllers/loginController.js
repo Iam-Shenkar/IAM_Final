@@ -15,7 +15,7 @@ const { httpError } = require('../class/httpError');
 const loginControl = async (req, res, next) => {
   try {
     const user = await userExist(req.body.email);
-    if (!user) throw new httpError(404, 'user not exist');
+    if (!user) throw new httpError(404, 'user not exist!');
     if (user.accountId !== 'none') await accountStatusCheck(user.accountId);
 
     await validPassword(req.body.password, user.password);

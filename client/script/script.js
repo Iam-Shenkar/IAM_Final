@@ -214,7 +214,9 @@ const updateUser = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
-  if (response.status === 200) { window.location.reload(); }
+  if (response.status === 200) {
+    window.location.reload();
+  }
 };
 
 const editAdmin = async () => {
@@ -224,7 +226,9 @@ const editAdmin = async () => {
   if (!name) {
     name = document.getElementById('exampleInputEmail1').value;
   }
-  if (status === 'Suspend') { status = 'suspended'; }
+  if (status === 'Suspend') {
+    status = 'suspended';
+  }
   const data = {
     email,
     name,
@@ -448,7 +452,8 @@ const logout = async () => {
     },
     body: JSON.stringify(data),
   });
-  if (response.status !== 302) { }
+  if (response.status !== 302) {
+  }
   window.location.href = `${runningPath}/`;
 };
 
@@ -574,60 +579,6 @@ const planChart = (accounts) => {
     },
     responsive: true,
     aspectRatio: 1,
-  });
-};
-
-const planChartGender = (users) => {
-  const genders = {};
-  for (let i = 0; i < users.length; i++) {
-    const gender = users[i].Gender;
-    if (genders[gender] == null) {
-      genders[gender] = 0;
-    }
-    genders[gender]++;
-  }
-  for (const gender in genders) {
-    genders[gender] = (genders[gender] / users.length) * 100;
-  }
-
-  const ctx = document.getElementById('genderPieChart')
-    .getContext('2d');
-  const pieChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: Object.keys(genders),
-      datasets: [{
-        data: Object.values(genders),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      }],
-    },
-    options: {
-      legend: {
-        display: true,
-        position: 'right',
-        labels: {
-          fontSize: 14,
-        },
-      },
-      responsive: true,
-      aspectRatio: 1,
-    },
   });
 };
 

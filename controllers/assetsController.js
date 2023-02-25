@@ -1,3 +1,4 @@
+const axios = require('axios');
 const assetsService = require('../services/assetsService');
 const authService = require('../services/authService');
 const accountService = require('../services/accountService');
@@ -45,6 +46,19 @@ const getFeatures = async (req, res, next) => {
       .json(result.data);
   } catch (err) {
     next(err);
+  }
+};
+
+const getFeaturesList = async (req, res, next) => {
+  try {
+    const response = await axios.get('http://localhost:8081/experiments/features');
+    const { data } = response;
+    res.json(data);
+    console.log(res.json(data));
+  } catch (error) {
+    console.error(error);
+    res.status(500)
+      .send('Server Error');
   }
 };
 
@@ -102,6 +116,7 @@ const setFeature = async (req, res, next) => {
 
 module.exports = {
   getFeatures,
+  getFeaturesList,
   getSeats,
   getCredit,
   getAllAssets,

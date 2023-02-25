@@ -10,7 +10,6 @@ const {
   oneTimePass,
 } = require('../repositories/repositories.init');
 
-
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
@@ -19,7 +18,11 @@ const createOneTimePass = async (email) => {
   });
 
   if (!sendCode) throw new httpError(400, 'No new OTP created');
-  const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
+  const newOneTimePass = {
+    email,
+    code: sendCode,
+    creationDate: new Date(),
+  };
   if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
 
   await oneTimePass.create(newOneTimePass);
@@ -41,7 +44,7 @@ const deleteFormOTP = async (data) => {
 };
 
 const otpCompare = async (UserCode, userCode) => {
-  if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');
+  if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');
 };
 
 const sendEmailOneTimePass = async (user, newCode) => {

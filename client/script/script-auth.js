@@ -55,9 +55,7 @@ const login = async () => {
     },
     body: JSON.stringify(data),
   });
-  // const body = await response.json();
   if (response.status === 200) {
-  // alert((body.message));
     window.location.href = '/';
   }
 };
@@ -107,14 +105,16 @@ const confirmationCode = async () => {
   if (response.status === 200) {
     const res = document.createElement('h3');
     res.innerHTML = body.message;
-    document.getElementById('emailConfirmation-div').append(res);
+    document.getElementById('emailConfirmation-div')
+      .append(res);
     const backButton = document.createElement('a');
     backButton.innerHTML = 'back to log in';
     backButton.setAttribute('href', '/login');
     const button = document.createElement('button');
     button.setAttribute('type', 'button');
     button.append(backButton);
-    document.getElementById('emailConfirmation-div').append(button);
+    document.getElementById('emailConfirmation-div')
+      .append(button);
   }
 };
 

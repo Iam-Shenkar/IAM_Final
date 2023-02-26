@@ -112,7 +112,7 @@ const setSeats = async (accountId, count = 1) => {
 
 const setCredit = async (accountId, count = 1) => {
   const assets = await getAssetsByAccountId(accountId);
-  const account = await getAccountByaccountId(accountId);
+  const account = await getAccountByAccountId(accountId);
   const { credits } = assets;
   let result;
   const remainCredits = await getCredit(accountId);
@@ -137,7 +137,7 @@ const setCredit = async (accountId, count = 1) => {
 
 const setFeature = async (accountId, feature) => {
   const assets = await getAssetsByAccountId(accountId);
-  const account = await getAccountByaccountId(accountId);
+  const account = await getAccountByAccountId(accountId);
   const currentFeatures = assets.features;
   const isFeatureExists = currentFeatures.includes(feature);
   let result;

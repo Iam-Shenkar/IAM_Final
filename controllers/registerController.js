@@ -32,7 +32,7 @@ const handleRegister = async (req, res, next) => {
     }
     if (userRole(newUser.email) !== 'admin') {
       await Account.create({ name: newUser.email });
-      User.update({ email: user.email }, {
+      await User.update({ email: user.email }, {
         type: 'admin',
       });
     }

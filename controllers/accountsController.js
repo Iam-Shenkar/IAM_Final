@@ -100,7 +100,7 @@ const exlusiveORinclusive = async (req, res, next) => {
         await Account.update({ _id: account._id.toString() }, { toggle: 'inclusive' });
       }
     } else {
-      console.log('returned false'); // ?
+      throw new httpError(400, 'You can’t switch to exclusive mode because not all your experiments are terminated.');
     }
     res.status(200);
   } catch (error) {

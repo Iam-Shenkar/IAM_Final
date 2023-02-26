@@ -164,6 +164,7 @@ const coreDetails = async (user) => {
   if (!user) {
     throw new httpError(404, 'user doesn\'t exist');
   } else {
+    if (user.accountId === 'none') { throw new httpError(404, 'user is admin'); }
     const account = await Account.retrieve({ _id: user.accountId });
     if (!account) {
       throw new httpError(404, `account of user ${user.email} doesn't exist`);

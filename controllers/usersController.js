@@ -4,6 +4,7 @@ const { Account, User } = require('../repositories/repositories.init');
 const { updateName, adminUpdateUser, deleteAuthorization } = require('../services/userService');
 const { validPassword } = require('../services/authService');
 const { setSeatsAdmin } = require('../services/assetsService');
+const { httpError } = require('../class/httpError');
 
 const getUsers = async (req, res, next) => {
   try {
@@ -90,6 +91,16 @@ const updatePass = async (req, res, next) => {
     res.status(403).json(e.message);
   }
 };
+
+const getRole = async (req, res) => {
+  const user = await User.retrieve({ email: req.body.email });
+  if (!user) {
+    throw new httpError(404, 'User was not found');
+  } else {
+    return res.status(200).json({ role: user.type });
+  }
+};
+
 module.exports = {
-  getUsers, getUser, deleteUser, updateUser, updatePass,
+  getUsers, getUser, deleteUser, updateUser, updatePass, getRole,
 };

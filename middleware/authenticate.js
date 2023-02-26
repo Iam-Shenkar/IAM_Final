@@ -18,7 +18,10 @@ const generateToken = (req, res, next) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
     res.set({ authorization: `Bearer ${accessToken}` });
-    req.token = { refreshToken, accessToken: `Bearer ${accessToken}` };
+    req.token = {
+      refreshToken,
+      accessToken: `Bearer ${accessToken}`,
+    };
     next();
   } catch (e) {
     return res.sendStatus(401);
@@ -62,10 +65,16 @@ const authenticateToken = async (req, res, next) => {
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });
       req.user = user;
-      req.token = { refreshToken: req.body.refreshToken, accessToken: authHeader };
+      req.token = {
+        refreshToken: req.body.refreshToken,
+        accessToken: authHeader,
+      };
       next();
     }
   });
 };
 
-module.exports = { generateToken, authenticateToken };
+module.exports = {
+  generateToken,
+  authenticateToken,
+};

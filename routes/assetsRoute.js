@@ -5,6 +5,7 @@ const { authenticateToken } = require('../middleware/validator');
 const assetsRoute = new express.Router();
 assetsRoute.get('/', assetsController.coreDetails);
 assetsRoute.get('/features', assetsController.getFeatures);
+assetsRoute.get('/features/list', assetsController.getFeaturesList);
 assetsRoute.get('/seats', assetsController.getSeats);
 assetsRoute.get('/credits', assetsController.getCredit);
 assetsRoute.put('/features/:feature', assetsController.setFeature);

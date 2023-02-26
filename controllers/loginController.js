@@ -38,7 +38,11 @@ const loginControl = async (req, res, next) => {
     );
     res.status(200)
       .json({
-        jwt: req.token.refreshToken, role: user.type, email: user.email, accountId: user.accountId,
+        jwt: req.token.refreshToken,
+        role: user.type,
+        email: user.email,
+        accountId: user.accountId,
+        name: user.name,
       });
   } catch (err) {
     next(err);

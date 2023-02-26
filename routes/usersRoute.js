@@ -9,6 +9,6 @@ usersRouter.get('/list', checkPermissionAdmin, usersController.getUsers);
 usersRouter.get('/:email', usersController.getUser);
 usersRouter.put('/pass', validation, usersController.updatePass);
 usersRouter.put('/:email', checkPermission, usersController.updateUser);
-usersRouter.delete('/:email', checkPermissionAdmin, usersController.deleteUser);
+usersRouter.delete('/:id', checkPermissionAdmin, usersController.deleteUser);
 
 module.exports = { usersRouter };

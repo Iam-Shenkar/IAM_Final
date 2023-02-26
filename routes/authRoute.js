@@ -14,7 +14,7 @@ authRouter.post('/logout', logoutController.logout);
 authRouter.post('/login', generateToken, loginController.loginControl);
 authRouter.put('/login/password', loginController.forgotPassControl);
 
-authRouter.post('/handleGoogle', loginController.handleGoogleLogin);
+// authRouter.post('/handleGoogle', loginController.handleGoogleLogin);
 
 authRouter.post('/register', registerController.handleRegister);
 authRouter.post('/register/code', registerController.handleConfirmCode);

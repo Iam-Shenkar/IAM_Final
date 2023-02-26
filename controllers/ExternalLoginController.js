@@ -31,7 +31,7 @@ const handleExternalCallBack = async (req, res) => {
   res.cookie('name', findUser.name);
   res.cookie('role', findUser.type);
   res.cookie('account', findUser.accountId);
-  res.redirect('http://localhost:3000');
+  res.redirect('/');
   // res.status(200)
   //   .json({ jwt: req.authInfo.refToken, role: findUser.type, email: findUser.email });
 };

@@ -32,13 +32,13 @@ const handleExternalCallBack = async (req, res) => {
   // res.cookie('role', findUser.type);
   // res.cookie('account', findUser.accountId);
   const {
-    email, name, role, accountId,
+    email, name, type, accountId,
   } = findUser;
   const jwt = req.authInfo.refToken; // Replace with your actual JWT token
   const queryParams = new URLSearchParams({
     email,
     name,
-    role,
+    role: type,
     accountId,
     jwt,
   });

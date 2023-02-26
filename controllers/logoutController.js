@@ -8,7 +8,7 @@ const logout = async (req, res) => {
   res.clearCookie('role');
   res.clearCookie('account');
   res.clearCookie('jwt');
-  res.status(200).redirect('../');
+  res.status(200).json({ message: 'logged out' });
 };
 
 module.exports = { logout };

@@ -97,8 +97,9 @@ const updatePass = async (req, res, next) => {
 const getRole = async (req, res) => {
   const jwt = req.headers.authorization;
   // const jwt = req.body.email;
+  console.log(`jwt : ${jwt}`);
   const decoded = jwtDecode.decode(jwt);
-  // console.log(decoded.email);
+  console.log(`decoded: ${decoded.email}`);
   const user = await User.retrieve({ email: decoded.email });
   if (!user) {
     throw new httpError(404, 'User was not found');

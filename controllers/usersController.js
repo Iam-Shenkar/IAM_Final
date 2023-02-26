@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
+const jwtDecode = require('jsonwebtoken');
+// const { cookie } = require('express-validator');
+const cookies = require('cookie-parser');
 const { Account, User } = require('../repositories/repositories.init');
-
 const { updateName, adminUpdateUser, deleteAuthorization } = require('../services/userService');
 const { validPassword } = require('../services/authService');
 const { setSeatsAdmin } = require('../services/assetsService');
@@ -64,7 +66,7 @@ const deleteUser = async (req, res, next) => {
     const user = await User.retrieve({ _id: req.params.id });
     let account;
     if (user.accountId === 'none') account = 'none';
-    if (user.accountId !== 'none') account = await Account.retrieve({_id: user.accountId});
+    if (user.accountId !== 'none') account = await Account.retrieve({ _id: user.accountId });
     deleteAuthorization(user, account, req.user);
 
     if (account.plan === 'free' && user.type === 'manager') {
@@ -93,7 +95,11 @@ const updatePass = async (req, res, next) => {
 };
 
 const getRole = async (req, res) => {
-  const user = await User.retrieve({ email: req.body.email });
+  const jwt = req.headers.authorization;
+  // const jwt = req.body.email;
+  const decoded = jwtDecode.decode(jwt);
+  // console.log(decoded.email);
+  const user = await User.retrieve({ email: decoded.email });
   if (!user) {
     throw new httpError(404, 'User was not found');
   } else {

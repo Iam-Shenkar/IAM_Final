@@ -1,4 +1,7 @@
 const bcrypt = require('bcrypt');
+const jwtDecode = require('jsonwebtoken');
+// const { cookie } = require('express-validator');
+const cookies = require('cookie-parser');
 const { Account, User } = require('../repositories/repositories.init');
 
 const { updateName, adminUpdateUser, deleteAuthorization } = require('../services/userService');
@@ -60,11 +63,10 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    let userAccount
     const user = await User.retrieve({ _id: req.params.id });
-     if(user.type === 'admin') userAccount = 'none'
-    if(user.type !== 'admin') userAccount = user.accountId
-    const account = await Account.retrieve({_id: userAccount});
+    let account;
+    if (user.accountId === 'none') account = 'none';
+    if (user.accountId !== 'none') account = await Account.retrieve({_id: user.accountId});
     deleteAuthorization(user, account, req.user);
 
     if (account.plan === 'free' && user.type === 'manager') {
@@ -91,6 +93,16 @@ const updatePass = async (req, res, next) => {
     res.status(403).json(e.message);
   }
 };
+
+const getRole = async (req, res) => {
+  const user = await User.retrieve({ email: req.body.email });
+  if (!user) {
+    throw new httpError(404, 'User was not found');
+  } else {
+    return res.status(200).json({ role: user.type });
+  }
+};
+
 module.exports = {
-  getUsers, getUser, deleteUser, updateUser, updatePass,
+  getUsers, getUser, deleteUser, updateUser, updatePass, getRole,
 };

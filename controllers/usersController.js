@@ -62,7 +62,9 @@ const updateUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const user = await User.retrieve({ _id: req.params.id });
-    const account = await Account.retrieve({ _id: user.accountId });
+    let account;
+    if (user.accountId === 'none') account = 'none';
+    if (user.accountId !== 'none') account = await Account.retrieve({_id: user.accountId});
     deleteAuthorization(user, account, req.user);
 
     if (account.plan === 'free' && user.type === 'manager') {

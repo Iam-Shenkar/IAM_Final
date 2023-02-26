@@ -49,11 +49,7 @@ const updateUser = async (req, res, next) => {
   try {
     const { user } = req;
     const data = req.body;
-    if (user.type !== 'admin' || user.email === data.email) {
-      await updateName(user, data);
-    } else {
-      await adminUpdateUser(data);
-    }
+    await updateName(user, data);
     return res.status(200).json({ message: 'user update' });
   } catch (err) {
     next(err);

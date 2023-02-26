@@ -49,7 +49,7 @@ const updateUser = async (req, res, next) => {
   try {
     const { user } = req;
     const data = req.body;
-    if (user.type !== 'admin') {
+    if (user.type !== 'admin' || user.email === data.email) {
       await updateName(user, data);
     } else {
       await adminUpdateUser(data);

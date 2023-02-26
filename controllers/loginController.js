@@ -1,5 +1,9 @@
 const bcrypt = require('bcrypt');
-const { User } = require('../repositories/repositories.init');
+const jwt = require('jsonwebtoken');
+const {
+  User,
+  Account,
+} = require('../repositories/repositories.init');
 const {
   userExist,
   statusCheck,
@@ -11,6 +15,11 @@ const {
   sendEmailPassword,
 } = require('../services/authService');
 const { httpError } = require('../class/httpError');
+const {
+  GoogleVerify,
+  GoogleIsExist,
+  GoogleExternalCallBack,
+} = require('../services/GoogleService');
 
 const loginControl = async (req, res, next) => {
   try {
@@ -28,10 +37,32 @@ const loginControl = async (req, res, next) => {
       },
     );
     res.status(200)
-      .json({ jwt: req.token.refreshToken, role: user.type, email: user.email });
+      .json({
+        jwt: req.token.refreshToken,
+        role: user.type,
+        email: user.email,
+        accountId: user.accountId,
+        name: user.name,
+      });
   } catch (err) {
     next(err);
   }
+};
+
+const handleGoogleLogin = async (req, res, next) => {
+  const user = await GoogleVerify(req.body.credentials);
+  let newFlag = 0;
+  if (user === undefined) {
+    return res.status(402).json({ message: 'Google Verification didnt work' });
+  }
+  newFlag = await GoogleIsExist(user);
+
+  const token = jwt.sign({ email: user.payload.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+  const refToken = jwt.sign({ email: user.payload.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+  await User.update({ email: user.payload.email }, { refreshToken: refToken });
+  const findUser = await GoogleExternalCallBack(user, newFlag, refToken);
+  res.status(200)
+    .json({ jwt: refToken, role: findUser.type, email: findUser.email });
 };
 
 const forgotPassControl = async (req, res, next) => {
@@ -57,4 +88,5 @@ const forgotPassControl = async (req, res, next) => {
 module.exports = {
   loginControl,
   forgotPassControl,
+  handleGoogleLogin,
 };

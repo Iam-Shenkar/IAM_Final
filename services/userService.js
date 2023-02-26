@@ -7,24 +7,6 @@ const updateName = async (user, data) => {
   await User.update({ email: user.email }, { name: data.name });
 };
 
-const adminUpdateUser = async (data) => {
-  const user = await User.retrieve({ email: data.email });
-  if (user.role === 'manager' && data.status === 'closed') throw new httpError(400, 'you cant update this user');
-
-  const updateData = {
-    name: data.name,
-    status: data.status,
-  };
-  if (data.status === 'suspended') {
-    const suspensionData = {
-      suspensionTime: data.suspensionTime,
-      suspensionDate: new Date(),
-    };
-    Object.assign(updateData, suspensionData);
-  }
-  await User.update({ email: user.email }, { ...updateData });
-};
-
 const deleteAuthorization = (user, account, data) => {
   if (user.email === data.email) throw new httpError(400, 'Cant delete yourself');
   if (!account) throw new httpError(400, 'Account not exist');
@@ -34,6 +16,5 @@ const deleteAuthorization = (user, account, data) => {
 
 module.exports = {
   updateName,
-  adminUpdateUser,
   deleteAuthorization,
 };

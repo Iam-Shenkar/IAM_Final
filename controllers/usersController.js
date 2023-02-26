@@ -8,9 +8,11 @@ const { setSeatsAdmin } = require('../services/assetsService');
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
+
     const outputArray = users.reduce((accumulator, currentValue) => [
       ...accumulator,
       {
+        id: currentValue._id,
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,
@@ -49,11 +51,7 @@ const updateUser = async (req, res, next) => {
   try {
     const { user } = req;
     const data = req.body;
-    if (user.type !== 'admin') {
-      await updateName(user, data);
-    } else {
-      await adminUpdateUser(data);
-    }
+    await updateName(user, data);
     return res.status(200).json({ message: 'user update' });
   } catch (err) {
     next(err);
@@ -62,7 +60,7 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const user = await User.retrieve({ email: req.params.email });
+    const user = await User.retrieve({ _id: req.params.id });
     const account = await Account.retrieve({ _id: user.accountId });
     deleteAuthorization(user, account, req.user);
 

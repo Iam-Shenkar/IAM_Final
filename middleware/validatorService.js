@@ -53,7 +53,7 @@ const checkPermission = async (req, res, next) => {
 
 const checkPermissionAdmin = async (req, res, next) => {
   const { user } = req;
-  if (user.type === 'user' || user.type === 'manager') res.status(401);
+  if (user.type === 'user' || user.type === 'manager') res.sendStatus(401);
   next();
 };
 

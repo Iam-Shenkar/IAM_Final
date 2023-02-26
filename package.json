@@ -22,8 +22,9 @@
   },
   "homepage": "https://github.com/Iam-Shenkar/IAM_Final#readme",
   "dependencies": {
-    "abtest-logger": "^1.0.20",
+    "abtest-logger": "^1.0.21",
     "amqplib": "^0.10.3",
+    "axios": "^1.3.4",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "bootstrap": "^5.2.3",
@@ -39,6 +40,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "generate-password": "^1.7.0",
+    "google-auth-library": "^8.7.0",
     "googlemaps": "^1.12.0",
     "jsonwebtoken": "^9.0.0",
     "mocha": "^10.2.0",

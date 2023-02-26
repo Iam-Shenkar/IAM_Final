@@ -5,6 +5,7 @@ const usersController = require('../controllers/usersController');
 const { checkPermissionAdmin, checkPermission } = require('../middleware/validatorService');
 const { validation } = require('../middleware/validator');
 
+usersRouter.post('/role', usersController.getRole);
 usersRouter.get('/list', checkPermissionAdmin, usersController.getUsers);
 usersRouter.get('/:email', usersController.getUser);
 usersRouter.put('/pass', validation, usersController.updatePass);

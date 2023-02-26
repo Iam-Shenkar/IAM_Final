@@ -33,6 +33,7 @@ const handleRegister = async (req, res, next) => {
     if (userRole(newUser.email) !== 'admin') {
       await Account.create({ name: newUser.email });
     }
+
     await register.deleteFormOTP(newUser.email);
     const newOneTimePass = await register.createOneTimePass(newUser.email);
     await sendEmailOneTimePass(newUser, newOneTimePass);

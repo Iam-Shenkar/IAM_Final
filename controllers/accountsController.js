@@ -73,6 +73,7 @@ const getAccount = async (req, res, next) => {
       accountId: req.params.id,
       name: acc.name,
       status: acc.status,
+      togglex: acc.toggle,
     };
     const merged = { ...outputArray, ...asset };
 
@@ -93,19 +94,14 @@ const exlusiveORinclusive = async (req, res, next) => {
     if (data === true) {
       const account = await Account.retrieve({ _id: accountId });
       const { toggle } = account;
-      if (toggle === 'inclusive') {
-        await Account.update({ _id: account._id.toString() }, { toggle: 'exclusive' });
-      } else {
-        await Account.update({ _id: account._id.toString() }, { toggle: 'inclusive' });
-      }
+      const toggleVal = toggle === 'inclusive' ? 'exclusive' : 'inclusive';
+      res.status(200)
+        .send(await Account.update({ _id: account._id.toString() }, { toggle: toggleVal }));
     } else {
-      console.log('returned false'); // ?
+      throw new httpError(400, 'You can’t switch to exclusive mode because not all your experiments are terminated.');
     }
-    res.status(200);
-  } catch (error) {
-    console.error(error);
-    res.status(500)
-      .send('Server Error');
+  } catch (err) {
+    next(err);
   }
 };
 

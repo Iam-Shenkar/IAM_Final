@@ -42,7 +42,7 @@ passport.use(new LinkedInStrategy({
       status: 'active',
     });
     await Account.create({ name: _user.email });
-    await Account.retrieve({name: email});
+    await Account.retrieve({ name: email });
     newFlag = 1;
   }
 
@@ -54,7 +54,7 @@ passport.use(new LinkedInStrategy({
     token,
     refToken,
     email,
-    newFlag
+    newFlag,
   };
   return done(null, user, data);
 }));

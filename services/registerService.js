@@ -62,12 +62,24 @@ const sendEmailOneTimePass = async (user, newCode) => {
 
 const createUser = async (user) => {
   const hashPassword = await bcrypt.hash(user.password, 12);
-  const newUser = {
-    name: user.name,
-    email: user.email,
-    accountId: 'none',
-    password: hashPassword,
-  };
+  let newUser = {};
+  if (userRole(user.email) !== 'admin') {
+    newUser = {
+      name: user.name,
+      email: user.email,
+      accountId: 'none',
+      password: hashPassword,
+    };
+    console.log(newUser);
+  } else {
+    newUser = {
+      name: user.name,
+      email: user.email,
+      type: 'admin',
+      accountId: 'none',
+      password: hashPassword,
+    };
+  }
   await User.create(newUser);
 };
 

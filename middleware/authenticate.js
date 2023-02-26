@@ -52,6 +52,7 @@ const refreshTokenVerify = async (req, res) => {
 };
 
 const authenticateToken = async (req, res, next) => {
+  console.log(req.headers)
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   // if (token == null) return res.redirect('/');

@@ -65,7 +65,9 @@ const getAccount = async (req, res, next) => {
     const asset = {
       // eslint-disable-next-line max-len
       Plan: acc.plan,
-      Seats: acc.assets.seats - acc.assets.usedSeats,
+      Seats: acc.assets.seats,
+      usedSeats: acc.assets.usedSeats,
+      remainSeats: acc.assets.seats - acc.assets.usedSeats,
       Credits: acc.assets.credits,
       Features: features,
       accountId: req.params.id,
@@ -86,7 +88,7 @@ const exlusiveORinclusive = async (req, res, next) => {
     const {
       accountId,
     } = req.params;
-    const response = await axios.get(`http://localhost:8081/experiments/allowChangeAttribute/${accountId}`);
+    const response = await axios.get(`https://ab-test-bvtg.onrender.com/experiments/allowChangeAttribute/${accountId}`);
     const { data } = response;
     if (data === true) {
       const account = await Account.retrieve({ _id: accountId });

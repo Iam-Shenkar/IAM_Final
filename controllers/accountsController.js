@@ -73,7 +73,7 @@ const getAccount = async (req, res, next) => {
       accountId: req.params.id,
       name: acc.name,
       status: acc.status,
-      toggle: acc.toggle,
+      togglex: acc.toggle,
     };
     const merged = { ...outputArray, ...asset };
 

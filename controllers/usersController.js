@@ -8,9 +8,11 @@ const { setSeatsAdmin } = require('../services/assetsService');
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
+
     const outputArray = users.reduce((accumulator, currentValue) => [
       ...accumulator,
       {
+        id: currentValue._id,
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,

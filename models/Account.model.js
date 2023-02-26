@@ -4,6 +4,7 @@ const {
 } = require('mongoose');
 
 const accountSchema = new Schema({
+
   name: {
     type: String,
     required: true,
@@ -27,20 +28,20 @@ const accountSchema = new Schema({
   },
   status: {
     type: String,
-    default: 'pending',
+    default: 'active',
   },
   assets: {
     credits: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     seats: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     usedSeats: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     features: [String],
   },

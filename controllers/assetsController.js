@@ -49,19 +49,6 @@ const getFeatures = async (req, res, next) => {
   }
 };
 
-const getFeaturesList = async (req, res, next) => {
-  try {
-    const response = await axios.get('http://localhost:8081/experiments/features');
-    const { data } = response;
-    res.json(data);
-    console.log(res.json(data));
-  } catch (error) {
-    console.error(error);
-    res.status(500)
-      .send('Server Error');
-  }
-};
-
 const getSeats = async (req, res, next) => {
   try {
     const result = await assetsService.getSeats(req.user.accountId);
@@ -116,7 +103,6 @@ const setFeature = async (req, res, next) => {
 
 module.exports = {
   getFeatures,
-  getFeaturesList,
   getSeats,
   getCredit,
   getAllAssets,

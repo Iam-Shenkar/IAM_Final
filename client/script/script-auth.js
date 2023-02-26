@@ -65,7 +65,6 @@ const register = async () => {
     name: document.getElementById('newUsername').value,
     email: document.getElementById('newUserEmail').value,
     password: document.getElementById('pass').value,
-    gender: document.getElementById('pass').value,
   };
   const response = await fetch(`${runningPath}/auth/register`, {
     method: 'POST',
@@ -89,7 +88,6 @@ const confirmationCode = async () => {
     email: document.getElementById('newUserEmail').value,
     password: document.getElementById('pass').value,
     code: document.getElementById('oneTimePassword').value,
-    gender: document.getElementById('gender').value,
   };
   const response = await fetch(`${runningPath}/auth/register/code`, {
     method: 'POST',

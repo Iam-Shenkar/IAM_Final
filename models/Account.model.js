@@ -6,11 +6,11 @@ const accountSchema = new Schema({
   creationDate: { type: Date, default: new Date() },
   suspensionTime: { type: Number, default: 0 },
   suspensionDate: { type: Date, default: 0 },
-  status: { type: String, default: 'pending' },
+  status: { type: String, default: 'active' },
   assets: {
-    credits: { type: Number, default: 0 },
-    seats: { type: Number, default: 0 },
-    usedSeats: { type: Number, default: 0 },
+    credits: { type: Number, default: 1 },
+    seats: { type: Number, default: 1 },
+    usedSeats: { type: Number, default: 1 },
     features: [String],
   },
 }, { collection: 'account' });

@@ -15,11 +15,11 @@ const handleExternalCallBack = async (req, res) => {
   await Account.update({ _id: account._id.toString() }, { status: 'active' });
   await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });
   // cookies
-  res.cookie('jwt', req.authInfo.refToken, {
-    httpOnly: true,
-    sameSite: 'None',
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+  // res.cookie('jwt', req.authInfo.refToken, {
+  //   httpOnly: true,
+  //   sameSite: 'None',
+  //   maxAge: 24 * 60 * 60 * 1000,
+  // });
   await User.update(
     { email: findUser.email },
     {
@@ -27,11 +27,24 @@ const handleExternalCallBack = async (req, res) => {
       refreshToken: req.authInfo.refToken,
     },
   );
-  res.cookie('email', findUser.email);
-  res.cookie('name', findUser.name);
-  res.cookie('role', findUser.type);
-  res.cookie('account', findUser.accountId);
-  res.redirect('/');
+  // res.cookie('email', findUser.email);
+  // res.cookie('name', findUser.name);
+  // res.cookie('role', findUser.type);
+  // res.cookie('account', findUser.accountId);
+  const {
+    email, name, role, accountId,
+  } = findUser;
+  const jwt = req.authInfo.refToken; // Replace with your actual JWT token
+  const queryParams = new URLSearchParams({
+    email,
+    name,
+    role,
+    accountId,
+    jwt,
+  });
+  const url = `http://localhost:3000/sign-in?${queryParams.toString()}`;
+  res.redirect(url);
+  // res.redirect('localhost:3000/');
   // res.status(200)
   //   .json({ jwt: req.authInfo.refToken, role: findUser.type, email: findUser.email });
 };

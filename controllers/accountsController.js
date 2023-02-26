@@ -103,10 +103,8 @@ const exlusiveORinclusive = async (req, res, next) => {
       throw new httpError(400, 'You can’t switch to exclusive mode because not all your experiments are terminated.');
     }
     res.status(200);
-  } catch (error) {
-    console.error(error);
-    res.status(500)
-      .send('Server Error');
+  } catch (err) {
+    next(err);
   }
 };
 

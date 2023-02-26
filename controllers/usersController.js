@@ -3,6 +3,7 @@ const jwtDecode = require('jsonwebtoken');
 // const { cookie } = require('express-validator');
 const cookies = require('cookie-parser');
 const { Account, User } = require('../repositories/repositories.init');
+
 const { updateName, adminUpdateUser, deleteAuthorization } = require('../services/userService');
 const { validPassword } = require('../services/authService');
 const { setSeatsAdmin } = require('../services/assetsService');

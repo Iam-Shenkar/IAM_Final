@@ -13,8 +13,9 @@ const handleExternalCallBack = async (req, res) => {
   }
   await statusCheck(findUser, User);
   if(account._id !== null){
-  await Account.update({ _id: account._id.toString() }, { status: 'active' }) ;
-  await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });}
+    await Account.update({ _id: account._id.toString() }, { status: 'active' }) ;
+    await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });
+  }
   // cookies
   // res.cookie('jwt', req.authInfo.refToken, {
   //   httpOnly: true,

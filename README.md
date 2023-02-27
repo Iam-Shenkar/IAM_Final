@@ -45,11 +45,11 @@ Accounts and users have the life cycle of: none → active → suspended → clo
 ```
 ## Run with render
 ```bash
-  type in url browser: https://iam-shenkar.onrender.com
+  type in url browser: https://abtest-shenkar.onrender.com/login
 ```
 ## Local run - not recommended
 ```bash
-git clone https://github.com/Iam-Shenkar/iamAssignment3.git
+git clone hhttps://github.com/Iam-Shenkar/IAM_Final.git
 ```
 ### Install
 ```bash

@@ -2,9 +2,16 @@ const bcrypt = require('bcrypt');
 const jwtDecode = require('jsonwebtoken');
 // const { cookie } = require('express-validator');
 const cookies = require('cookie-parser');
-const { Account, User } = require('../repositories/repositories.init');
+const {
+  Account,
+  User,
+} = require('../repositories/repositories.init');
 
-const { updateName, adminUpdateUser, deleteAuthorization } = require('../services/userService');
+const {
+  updateName,
+  adminUpdateUser,
+  deleteAuthorization,
+} = require('../services/userService');
 const { validPassword } = require('../services/authService');
 const { setSeatsAdmin } = require('../services/assetsService');
 const { httpError } = require('../class/httpError');
@@ -24,7 +31,8 @@ const getUsers = async (req, res, next) => {
         Edit: '',
       },
     ], []);
-    res.status(200).json(outputArray);
+    res.status(200)
+      .json(outputArray);
   } catch (err) {
     next(err);
   }
@@ -45,7 +53,8 @@ const getUser = async (req, res, next) => {
       status: user.status,
       account: accountName,
     };
-    res.status(200).json(del);
+    res.status(200)
+      .json(del);
   } catch (err) {
     next(err);
   }
@@ -56,7 +65,8 @@ const updateUser = async (req, res, next) => {
     const { user } = req;
     const data = req.body;
     await updateName(user, data);
-    return res.status(200).json({ message: 'user update' });
+    return res.status(200)
+      .json({ message: 'user update' });
   } catch (err) {
     next(err);
   }
@@ -77,7 +87,7 @@ const deleteUser = async (req, res, next) => {
       await User.delete({ email: user.email });
       await setSeatsAdmin(user.accountId, -1);
     }
-    return res.status(200).json({ message: 'The user has been deleted' });
+    res.send();
   } catch (e) {
     next(e);
   }
@@ -89,9 +99,11 @@ const updatePass = async (req, res, next) => {
     await validPassword(req.body.password, user.password);
     const newPass = await bcrypt.hash(req.body.newPassword, 12);
     await User.update({ email: user.email }, { password: newPass });
-    res.status(200).json('Password Updated');
+    res.status(200)
+      .json('Password Updated');
   } catch (e) {
-    res.status(403).json(e.message);
+    res.status(403)
+      .json(e.message);
   }
 };
 
@@ -105,10 +117,16 @@ const getRole = async (req, res) => {
   if (!user) {
     throw new httpError(404, 'User was not found');
   } else {
-    return res.status(200).json({ role: user.type });
+    return res.status(200)
+      .json({ role: user.type });
   }
 };
 
 module.exports = {
-  getUsers, getUser, deleteUser, updateUser, updatePass, getRole,
+  getUsers,
+  getUser,
+  deleteUser,
+  updateUser,
+  updatePass,
+  getRole,
 };

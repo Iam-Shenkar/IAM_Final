@@ -30,20 +30,20 @@ const { authenticateToken } = require('./middleware/authenticate');
 const { morgan } = require('./middleware/logger');
 const { listenToQ } = require('./Q/reciever');
 
-const {
-  freePlan2Q,
-  newStatus2Q,
-} = require('./Q/sender');
-
 const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 app.use(cors('*'));
 app.use(express.static(path.join(__dirname, 'client')));
-
-
 
 app.use(express.json());
 
@@ -65,7 +65,7 @@ app.use(
 app.use('/auth', validation, auth.authRouter);
 app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
-app.use('/accounts',authenticateToken, accounts.accountsRouter);
+app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.use('/', dashboard.dashboardRouter);
 
 app.use(errorHandler);

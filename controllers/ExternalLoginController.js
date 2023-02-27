@@ -12,8 +12,9 @@ const handleExternalCallBack = async (req, res) => {
     await freePlan2Q(account._id.toString());
   }
   await statusCheck(findUser, User);
-  await Account.update({ _id: account._id.toString() }, { status: 'active' });
-  await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });
+  if(account._id !== null){
+  await Account.update({ _id: account._id.toString() }, { status: 'active' }) ;
+  await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });}
   // cookies
   // res.cookie('jwt', req.authInfo.refToken, {
   //   httpOnly: true,

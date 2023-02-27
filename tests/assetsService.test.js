@@ -1,7 +1,8 @@
-const { Account } = require('../repositories/repositories.init');
+const { Account, User } = require('../repositories/repositories.init');
+const accountService = require('../services/accountService');
 const { httpError } = require('../class/httpError');
 const assetsService = require('../services/assetsService');
-const { getAccountByAccountId } = require('../services/assetsService');
+const { getAccountByAccountId, setSeats } = require('../services/assetsService');
 
 describe('getAccountByAccountId', () => {
   it('should throw an error if accountId is not provided', async () => {

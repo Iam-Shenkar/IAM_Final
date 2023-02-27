@@ -55,6 +55,7 @@ const getAccount = async (req, res, next) => {
     const users = await User.find({ accountId: req.params.id });
     const outputArray = users.reduce((accumulator, currentValue) => [...accumulator,
       {
+        id: currentValue._id,
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,

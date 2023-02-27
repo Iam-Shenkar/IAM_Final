@@ -1,7 +1,8 @@
+import jest from 'jest';
+
 const jwt = require('jsonwebtoken');
 const { User } = require('../repositories/repositories.init');
 const { generateToken } = require('../middleware/authenticate');
-
 jest.mock('jsonwebtoken', () => ({
   sign: jest.fn(),
 }));
